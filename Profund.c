@@ -3,18 +3,27 @@
 
 char productID[100][20];
 char productName[100][20];
+int productQuantity[100];
 char productDate[100][20];
 
+int productCount = 0;
 
 void OpenFile(){
-    FILE*file = fopen("stock.csv","r");
-    if(file == NULL){
+    FILE *file = fopen("stock.csv","r");
+    if(!file){
         printf("FILE : %p\n",file);
         printf("CANNOT OPEN FILE\n");
+        return;
     }
-    
-
-
+    char line [200];
+    while(fgets(line,sizeof(line),file)) {
+        if (productCount >=100)break;
+        sscanf(line,"%[^,],%[^,],%d,%s",
+            productID[productCount],
+            productName[productCount],
+            productQuantity[productCount],
+            productDate[productCount]);
+    }
     fclose(file);
 }
 void ShowProduct(){
@@ -26,7 +35,7 @@ void SearchProduct(){
     
 }
 void AddProduct(){
-    FILE*file = fopen("stock.csv","r");
+    FILE*file = fopen("stock.csv","w");
     if(file == NULL){
         printf("FILE : %p\n",file);
         printf("CANNOT OPEN FILE\n");
